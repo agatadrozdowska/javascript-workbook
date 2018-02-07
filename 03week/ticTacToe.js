@@ -13,6 +13,7 @@ let board = [
 ];
 
 let playerTurn = 'X';
+let movesCounter = 0;
 
 function printBoard() {
   console.log('   0  1  2');
@@ -24,23 +25,93 @@ function printBoard() {
 }
 
 function horizontalWin() {
-  // Your code here
+  for (var i = 0; i <= 2; i++) {
+    let count = 0;
+    for (var j = 0; j <= 2; j++) {
+      if (board[i][j] === playerTurn) {
+        count++;
+        if (count === 3) {
+          return true;
+        }
+      } else {
+        break;
+      }
+    }
+  }
+  return false;
 }
 
 function verticalWin() {
-  // Your code here
+  for (var i = 0; i <= 2; i++) {
+    let count = 0;
+    for (var j = 0; j <= 2; j++) {
+      if (board[j][i] === playerTurn) {
+        count++;
+        if (count === 3) {
+          return true;
+        }
+      } else {
+        break;
+      }
+    }
+  }
+  return false;
 }
 
 function diagonalWin() {
-  // Your code here
+  if ((board[0][0] === playerTurn &&
+      board[1][1] === playerTurn &&
+      board[2][2] === playerTurn)
+      ||
+      (board[0][2] === playerTurn &&
+      board[1][1] === playerTurn &&
+      board[2][0] === playerTurn)) {
+        return true;
+      } else {
+        return false;
+      }
 }
 
 function checkForWin() {
-  // Your code here
+  if (horizontalWin() || verticalWin() || diagonalWin()) {
+    console.log(`Player ${playerTurn} won!`);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function ticTacToe(row, column) {
-  // Your code here
+  board[row][column] = playerTurn;
+  movesCounter++;
+
+  if (checkForWin()) {
+    return false;
+  }
+
+  if (movesCounter === 9) {
+    console.log("It's a tie!");
+    return false;
+  }
+
+  if (playerTurn === "X") {
+    playerTurn = "O";
+  } else {
+    playerTurn = "X";
+  }
+  return true;
+}
+
+function validate(row, column) {
+  if (isNaN(row) || isNaN(column) || row === '' || column === '') {
+    return false;
+  }
+
+  if (board[row][column] === ' ') {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function getPrompt() {
@@ -48,11 +119,17 @@ function getPrompt() {
   console.log("It's Player " + playerTurn + "'s turn.");
   rl.question('row: ', (row) => {
     rl.question('column: ', (column) => {
-      ticTacToe(row, column);
+      if (validate(row, column)) {
+        if (!ticTacToe(row, column)) {
+          printBoard();
+          return;
+        }
+      } else {
+        console.log("Invalid move!")
+      }
       getPrompt();
     });
   });
-
 }
 
 

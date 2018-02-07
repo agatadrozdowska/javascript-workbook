@@ -1,6 +1,9 @@
 'use strict';
 
-const printListOfOlympians () => {
-  const olympians = ['mike', 'agata', 'renee'];
-  olympians.forEach((name) => {console.log(name)})
+const printListOfOlympians = () => {
+  const olympians = ['mike', 'agata', 'renee', 'joe', 'bill'];
+  olympians.forEach((name) => {
+    console.log(name);
+  });
 }
+printListOfOlympians();

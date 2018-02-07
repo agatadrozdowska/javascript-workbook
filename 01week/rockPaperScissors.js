@@ -9,27 +9,32 @@ const rl = readline.createInterface({
 
 
 function rockPaperScissors(hand1, hand2) {
+
+  hand1 = hand1.trim().toLowerCase();
+  hand2 = hand2.trim().toLowerCase();
+  
   if (hand1 === hand2) {
-    return "It's a tie";
+    return "It's a tie!";
   } else if (hand1 === 'rock') {
     if (hand2 === 'scissors') {
-      return 'h1 wins';
+      return 'Hand one wins!';
     } else {
-      return 'h2 wins';
+      return 'Hand two wins!';
     }
   } else if (hand1 === 'scissors') {
     if(hand2 === 'rock') {
-      return 'h2 wins';
+      return 'Hand two wins!';
     } else {
-      return 'h1 wins';
+      return 'Hand one wins!';
     }
   } else {
     if (hand2 === 'scissors') {
-      return 'h2 wins';
+      return 'Hand two wins!';
     } else {
-      return 'h1 wins';
+      return 'Hand one wins!';
     }
   }
+
 }
 
 function getPrompt() {

@@ -13,6 +13,9 @@ let stacks = {
   c: []
 };
 
+const availableChoices = ['a', 'b', 'c'];
+
+
 function printStacks() {
   console.log("a: " + stacks.a);
   console.log("b: " + stacks.b);
@@ -34,9 +37,23 @@ function checkForWin() {
 
 }
 
-function towersOfHanoi(startStack, endStack) {
-  // Your code here
+const towersOfHanoi = (startStack, endStack) => {
+  startStack = startStack.trim();
+  endStack = endStack.trim();
 
+  if (validInput(startStack, endStack)) {
+    console.log('Valid input!');
+  } else {
+    console.log('Invalid input!');
+  }
+}
+
+const validInput = (startStack, endStack) => {
+  if(availableChoices.indexOf(startStack) !== -1 && availableChoices.indexOf(endStack) !== -1) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function getPrompt() {
@@ -50,5 +67,3 @@ function getPrompt() {
 }
 
 getPrompt();
-
-

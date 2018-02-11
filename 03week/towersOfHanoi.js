@@ -42,7 +42,13 @@ const towersOfHanoi = (startStack, endStack) => {
   endStack = endStack.trim();
 
   if (validInput(startStack, endStack)) {
-    console.log('Valid input!');
+    let topBlock = stacks[startStack][stacks[startStack].length - 1];
+    let bottomBlock = stacks[endStack][stacks[endStack].length - 1];
+    if(isLegal(endStack, topBlock, bottomBlock)) {
+      console.log('I will do move here');
+    } else {
+      console.log('Illegal move!');
+    }
   } else {
     console.log('Invalid input!');
   }

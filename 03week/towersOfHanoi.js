@@ -76,9 +76,13 @@ const isLegal = (endStack, topBlock, bottomBlock) => {
   }
 }
 
-function checkForWin() {
-  // Your code here
-
+const checkForWin = () => {
+  if (stacks.c.length === 4) {
+    console.log('You won!');
+    return true;
+  } else {
+    return false;
+  }
 }
 
 const towersOfHanoi = (startStack, endStack) => {
@@ -111,6 +115,9 @@ const getPrompt = () => {
   rl.question('start stack: ', (startStack) => {
     rl.question('end stack: ', (endStack) => {
       towersOfHanoi(startStack, endStack);
+      if (checkForWin()) {
+        return;
+      }
       getPrompt();
     });
   });

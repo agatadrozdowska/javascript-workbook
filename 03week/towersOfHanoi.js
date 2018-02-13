@@ -124,3 +124,15 @@ const getPrompt = () => {
 }
 
 getPrompt();
+
+
+//Test cases
+//
+// - It should check for legal moves:
+//   - If I call isLegal('a', 2, undefined) and stacks['a'] is empty it should return true
+//   - If I call isLegal('a', 2, 3) it should return true
+//   - If I call isLegal('a', 3, 2) it should return false
+//
+// - It should check for winning
+//   - If I set stacks.c to [4, 3, 2, 1] checkForWin() should return true
+//   - If I set stacks.c to [4, 3] checkForWin() should return false

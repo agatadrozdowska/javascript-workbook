@@ -43,3 +43,9 @@ const getDateAndBase = () => {
   console.log(latestExchangeRate.date);
 }
 getDateAndBase();
+
+
+const getAvailableCurrencies = () => {
+  console.log(Object.keys(latestExchangeRate.rates));
+}
+getAvailableCurrencies();

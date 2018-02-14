@@ -49,3 +49,11 @@ const getAvailableCurrencies = () => {
   console.log(Object.keys(latestExchangeRate.rates));
 }
 getAvailableCurrencies();
+
+
+const currencyAndRate = (obj) => {
+  for (let x in obj) {
+    console.log(`${x} is at a ${obj[x]} conversion rate`);
+  }
+}
+currencyAndRate(latestExchangeRate.rates);

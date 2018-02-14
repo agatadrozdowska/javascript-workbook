@@ -56,4 +56,15 @@ const currencyAndRate = (obj) => {
     console.log(`${x} is at a ${obj[x]} conversion rate`);
   }
 }
+
 currencyAndRate(latestExchangeRate.rates);
+
+
+const multiplyByTen = (obj) => {
+  let arr = [];
+  for (let x in obj) {
+    arr.push(obj[x]);
+  }
+  arr.forEach((num) => {console.log(latestExchangeRate.multiplyByTen(num))});
+}
+multiplyByTen(latestExchangeRate.rates);

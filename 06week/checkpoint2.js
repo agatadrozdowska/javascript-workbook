@@ -26,11 +26,19 @@ console.log(sumEvens);
 // }
 
 const numCount = {};
-
+nums.forEach((item) => {
+  if (numCount[item]) {
+    numCount[item]++;
+  } else {
+    numCount[item] = 1;
+  }
+})
 console.log(numCount)
 
 
 // Find the index of the first "Austin" value (the value plus its index equals 512)
-const atxIdx;
+const atxIdx = nums.findIndex((item, index) => {
+  return item + index === 512;
+})
 
 console.log(`index: ${atxIdx}, value: ${nums[atxIdx]}`);

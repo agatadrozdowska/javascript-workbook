@@ -11,6 +11,42 @@ let jobTypes = {
 
 // Your code here
 
+class CrewMember {
+  constructor (name, job, specialSkill) {
+    this.name = name;
+    this.job = job;
+    this.specialSkill = specialSkill;
+    this.ship = null;
+  }
+  enterShip(shipToEnter) {
+    this.ship = shipToEnter;
+    shipToEnter.addCrewMember(this);
+  }
+}
+
+
+class Ship {
+  constructor (name, type, ability) {
+    this.name = name;
+    this.type = type;
+    this.ability = ability;
+    this.crew = [];
+  }
+  addCrewMember(crewMember) {
+    this.crew.push(crewMember);
+  }
+
+  missionStatement() {
+      if(this.crew.length > 0 && jobTypes[this.crew[0].job] === this.type) {
+        return this.ability;
+      } else {
+        return "Can't perform a mission yet.";
+      }
+    }
+}
+
+
+
 //tests
 if (typeof describe === 'function'){
   describe('CrewMember', function(){

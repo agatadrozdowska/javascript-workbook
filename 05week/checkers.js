@@ -8,8 +8,8 @@ const rl = readline.createInterface({
 });
 
 
-function Checker() {
-  // Your code here
+function Checker(symbol) {
+  this.symbol = symbol;
 }
 
 function Board() {
@@ -22,6 +22,14 @@ function Board() {
       // push in 8 columns of nulls
       for (let column = 0; column < 8; column++) {
         this.grid[row].push(null);
+
+        if(row < 2 && (column + row) % 2 === 0) {
+          this.grid[row][column] = new Checker('O');
+        }
+
+        if(row >= 6 && (column + row) % 2 === 0) {
+          this.grid[row][column] = new Checker('X');
+        }
       }
     }
   };
@@ -52,16 +60,127 @@ function Board() {
     console.log(string);
   };
 
-  // Your code here
 }
-function Game() {
 
+function Game() {
+  this.player = 'O';
   this.board = new Board();
 
   this.start = function() {
     this.board.createGrid();
-    // Your code here
+    this.validateInput = function(whichPiece, toWhere) {
+      this.whichPiece = whichPiece.trim();
+      this.toWhere = toWhere.trim();
+      let whichPieceNum = Number(whichPiece);
+      let toWhereNum = Number(toWhere);
+      if(this.validateSingleInput(whichPieceNum) && this.validateSingleInput(toWhereNum)) {
+        return true;
+      } else {
+        console.log("Invalid input!");
+        return false;
+      }
+    }
+
+    this.validateSingleInput = function(input) {
+      return input != NaN && input >= 0 && input <= 77;
+    }
+
+
+    this.legalMove = function(whichPiece, toWhere) {
+      const fromRow = Number(whichPiece[0]);
+      const fromCol = Number(whichPiece[1]);
+      const toRow = Number(toWhere[0]);
+      const toCol = Number(toWhere[1]);
+
+      if(this.legalDirection(fromRow, fromCol, toRow, toCol) &&
+         this.fromIsLegal(fromRow, fromCol) &&
+         this.toIsLegal(fromRow, fromCol, toRow, toCol)) {
+        return true;
+      } else {
+        console.log("Illegal move!");
+        return false;
+      }
+    }
+
+    // Checks if the player is moving according to the rules. A player can move in diagonal 1 or 2 in every direction.
+    this.legalDirection = function(fromRow, fromCol, toRow, toCol) {
+      if(this.player === 'O') {
+        return (toRow - fromRow === 1 && Math.abs(toCol - fromCol) === 1) ||
+                (toRow - fromRow === 2 && Math.abs(toCol - fromCol) === 2);
+      } else {
+        return (fromRow - toRow === 1 && Math.abs(fromCol - toCol) === 1) ||
+                (fromRow - toRow === 2 && Math.abs(fromCol - toCol) === 2);
+      }
+    }
+
+    this.fromIsLegal = function(fromRow, fromCol) {
+      const fromSpot = this.board.grid[fromRow][fromCol];
+      return fromSpot != null && fromSpot.symbol === this.player;
+    }
+
+    this.toIsLegal = function(fromRow, fromCol, toRow, toCol) {
+      let jumpSize = 0;
+      if(this.player === 'O') {
+        jumpSize = toRow - fromRow;
+      } else {
+        jumpSize = fromRow - toRow;
+      }
+      const toSpot = this.board.grid[toRow][toCol];
+
+      // If jumpSize == 1 it means we do normal move, no killing. Only requirnment is for the toSpot to be empty
+      if(jumpSize == 1) {
+        if(toSpot == null) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+      // If jumpSize == 2 it means we are jumping 2 fields. This is legal only if:
+      //  - toSpot is empty
+      //  - Spot between fromSpot and toSpot is not empty
+      //  - Spot between fromSpot and toSpot is a enemy checker (symbol !== player) -> killing
+        const betweenRow = (toRow + fromRow) / 2;
+        const betweenCol = (toCol + fromCol) / 2;
+        const betweenSpots = this.board.grid[betweenRow][betweenCol];
+        if(toSpot === null && betweenSpots !== null && betweenSpots.symbol !== this.player) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
   };
+
+  this.moveChecker = function(whichPiece, toWhere) {
+    if (this.validateInput(whichPiece, toWhere) && this.legalMove(whichPiece, toWhere)) {
+      const fromRow = Number(whichPiece[0]);
+      const fromCol = Number(whichPiece[1]);
+      const toRow = Number(toWhere[0]);
+      const toCol = Number(toWhere[1]);
+
+      let jumpSize = 0;
+      if(this.player === 'O') {
+        jumpSize = toRow - fromRow;
+      } else {
+        jumpSize = fromRow - toRow;
+      }
+
+      this.board.grid[fromRow][fromCol] = null;
+      this.board.grid[toRow][toCol] = new Checker(this.player);
+
+      if(jumpSize == 2) {
+        const betweenRow = (toRow + fromRow) / 2;
+        const betweenCol = (toCol + fromCol) / 2;
+        this.board.grid[betweenRow][betweenCol] = null;
+      }
+
+      if(this.player === 'O') {
+        this.player = 'X';
+      } else {
+        this.player = 'O';
+      }
+    }
+  }
 }
 
 function getPrompt() {
@@ -77,7 +196,6 @@ function getPrompt() {
 const game = new Game();
 game.start();
 
-
 // Tests
 
 if (typeof describe === 'function') {
@@ -92,7 +210,7 @@ if (typeof describe === 'function') {
 
   describe('Game.moveChecker()', function () {
     it('should move a checker', function () {
-      assert(!game.board.grid[4][1]);
+      assert(game.board.grid[4][1]);
       game.moveChecker('50', '41');
       assert(game.board.grid[4][1]);
       game.moveChecker('21', '30');
